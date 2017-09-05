@@ -156,4 +156,23 @@ public class StreamApiToolsTests {
         assertEquals(1, (long) map.get("b"));
         assertEquals(1, (long) map.get("c"));
     }
+
+    @Test
+    void testJoinStrings1() {
+        StringJoiner joiner = new StringJoiner(", ");
+        joiner.add("a");
+        joiner.add("b");
+        joiner.add("c");
+
+        String joined = joiner.toString();
+
+        assertEquals("a, b, c", joined);
+    }
+
+    @Test
+    void testJoinStrings2() {
+        String joined = Stream.of("a", "b", "c")
+            .collect(Collectors.joining(", "));
+        assertEquals("a, b, c", joined);
+    }
 }
