@@ -12,7 +12,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
-public class StreamApiToolsTests {
+public class StreamApiExamples {
 
     @Test
     public void testConvertTo2dArray() {
@@ -152,9 +152,9 @@ public class StreamApiToolsTests {
 
         assertEquals(3, map.size());
 
-        assertEquals(2, (long) map.get("a"));
-        assertEquals(1, (long) map.get("b"));
-        assertEquals(1, (long) map.get("c"));
+        assertEquals(2, map.get("a").longValue());
+        assertEquals(1, map.get("b").longValue());
+        assertEquals(1, map.get("c").longValue());
     }
 
     @Test
