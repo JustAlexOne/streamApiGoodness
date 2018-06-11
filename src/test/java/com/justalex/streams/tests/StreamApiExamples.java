@@ -1,5 +1,6 @@
 package com.justalex.streams.tests;
 
+import com.justalex.streams.users.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
@@ -8,9 +9,10 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static com.justalex.streams.users.Gender.FEMALE;
+import static com.justalex.streams.users.Gender.MALE;
 import static java.util.Arrays.asList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StreamApiExamples {
 
@@ -174,5 +176,24 @@ public class StreamApiExamples {
         String joined = Stream.of("a", "b", "c")
             .collect(Collectors.joining(", "));
         assertEquals("a, b, c", joined);
+    }
+
+    @Test
+    void testFindElementsInListByProperty() {
+        List<User> users = asList(
+            new User("John", 15, MALE),
+            new User("Rob", 11, FEMALE),
+            new User("Carl", 11, MALE)
+        );
+
+        List<String> usersWithNames = asList("John", "Rob");
+
+        List<User> result = new ArrayList<>();
+        usersWithNames.forEach(userName -> users.stream().filter(user -> userName.equals(user.getName())).findFirst().ifPresent(result::add));
+
+        assertEquals(2, result.size());
+        assertTrue(result.contains(new User("John", 15, MALE)));
+        assertTrue(result.contains(new User("Rob", 11, FEMALE)));
+        assertFalse(result.contains(new User("Carl", 11, MALE)));
     }
 }
