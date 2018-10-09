@@ -196,4 +196,18 @@ public class StreamApiExamples {
         assertTrue(result.contains(new User("Rob", 11, FEMALE)));
         assertFalse(result.contains(new User("Carl", 11, MALE)));
     }
+
+    @Test
+    void testSubMapHashMap() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("a", 1);
+        map.put("b", 2);
+        map.put("c", 3);
+
+        Map<String, Integer> newMap = map.keySet().stream().limit(2).collect(Collectors.toMap(key -> key, map::get));
+
+        assertEquals(2, newMap.size());
+        assertTrue(newMap.containsKey("a"));
+        assertTrue(newMap.containsKey("b"));
+    }
 }
