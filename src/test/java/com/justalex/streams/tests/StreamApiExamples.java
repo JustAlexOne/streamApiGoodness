@@ -147,6 +147,9 @@ public class StreamApiExamples {
         assertEquals(false, intsList.stream().anyMatch(x -> x > 100));
     }
 
+    /**
+     * Form a map of the list like: key = unique list item, value = count of duplicating items in the list
+     */
     @Test
     void testListToMap() {
         Map<String, Long> map = Stream.of("a", "b", "c", "a")
@@ -209,5 +212,32 @@ public class StreamApiExamples {
         assertEquals(2, newMap.size());
         assertTrue(newMap.containsKey("a"));
         assertTrue(newMap.containsKey("b"));
+    }
+
+    @Test
+    void testSortMap() {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("a", 2);
+        map.put("b", 1);
+        map.put("c", 3);
+
+        LinkedHashMap<String, Integer> result = map.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        ArrayList<Integer> listSorted = new ArrayList<>(result.values());
+        assertEquals(Integer.valueOf(1), listSorted.get(0));
+        assertEquals(Integer.valueOf(2), listSorted.get(1));
+        assertEquals(Integer.valueOf(3), listSorted.get(2));
+
+        LinkedHashMap<String, Integer> resultReversed = map.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        LinkedHashMap<String, Integer> resultReversed_example2 = map.entrySet().stream().sorted(Comparator.comparing(Map.Entry::getValue)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        ArrayList<Integer> listSortedReversed = new ArrayList<>(resultReversed.values());
+        assertEquals(Integer.valueOf(3), listSortedReversed.get(0));
+        assertEquals(Integer.valueOf(2), listSortedReversed.get(1));
+        assertEquals(Integer.valueOf(1), listSortedReversed.get(2));
+
+        // Convert directly to list
+        List<Integer> resList = map.entrySet().stream().sorted(Comparator.comparing(Map.Entry<String, Integer>::getValue).reversed()).map(Map.Entry::getValue).collect(Collectors.toList());
+        assertEquals(Integer.valueOf(3), resList.get(0));
+        assertEquals(Integer.valueOf(2), resList.get(1));
+        assertEquals(Integer.valueOf(1), resList.get(2));
     }
 }
